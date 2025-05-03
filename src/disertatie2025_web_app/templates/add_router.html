@@ -1,0 +1,15 @@
+<h2>Add Router</h2>
+<form method="POST">
+    <label>Name:</label><br>
+    <input type="text" name="name" required><br><br>
+
+    <label>Management IP:</label><br>
+    <input type="text" name="mgmt_ip" required><br><br>
+
+    <label>Site:</label><br>
+    <input type="text" name="site" required><br><br>
+
+    <button type="submit">Add Router</button>
+</form>
+
+<a href="{{ url_for('main.list_routers') }}">Back to list</a>

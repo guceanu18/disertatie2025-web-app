@@ -1,0 +1,38 @@
+<form method="POST" action="{{ url_for('main.delete_routers') }}">
+    <table>
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Management IP</th>
+                <th>Site</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for router in routers %}
+            <tr>
+                <td><input type="checkbox" name="selected_routers" value="{{ router.name }}"></td>
+                <td>{{ router.id }}</td>
+                <td>{{ router.name }}</td>
+                <td>{{ router.mgmt_ip }}</td>
+                <td>{{ router.site }}</td>
+                <td>
+                    <a href="{{ url_for('main.update_router', name=router.name) }}">Edit</a>
+                    <a href="{{ url_for('main.run_command', router_name=router['name']) }}">Run Command</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" style="text-align:center;">No routers found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Delete Selected</button>
+</form>
+
+<br>
+<a href="{{ url_for('main.add_router') }}">Add New Router</a>
+

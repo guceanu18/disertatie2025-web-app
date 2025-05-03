@@ -1,0 +1,15 @@
+<h2>Update Router: {{ router.name }}</h2>
+<form method="POST">
+    <label>New Name:</label><br>
+    <input type="text" name="new_name" value="{{ router.name }}"><br><br>
+
+    <label>Management IP:</label><br>
+    <input type="text" name="mgmt_ip" value="{{ router.mgmt_ip }}"><br><br>
+
+    <label>Site:</label><br>
+    <input type="text" name="site" value="{{ router.site }}"><br><br>
+
+    <button type="submit">Update Router</button>
+</form>
+
+<a href="{{ url_for('main.list_routers') }}">Back to list</a>

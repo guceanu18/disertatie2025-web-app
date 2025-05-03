@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Run Command on {{ router_name }}</title>
+</head>
+<body>
+    <h1>Run Command on {{ router_name }}</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+        <label for="command">Enter Command:</label><br>
+        <input type="text" id="command" name="command" required>
+        <br><br>
+        <input type="submit" value="Run">
+    </form>
+
+    {% if output %}
+        <h2>Output:</h2>
+        <pre>{{ output }}</pre>
+    {% endif %}
+
+    <a href="{{ url_for('main.list_routers') }}">Back to Routers List</a>
+</body>
+</html>
