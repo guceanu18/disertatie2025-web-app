@@ -21,6 +21,8 @@
                 <td>
                     <a href="{{ url_for('main.update_router', name=router.name) }}">Edit</a>
                     <a href="{{ url_for('main.run_command', router_name=router['name']) }}">Run Command</a>
+                    <a href="{{ url_for('main.push_config', router_name=router['name']) }}">Push Config</a> |
+
                 </td>
             </tr>
             {% else %}

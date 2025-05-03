@@ -1,5 +1,9 @@
+import json
+
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from disertatie2025_api_client import RouterClient
+
+from src.disertatie2025_web_app.services.assign_mgmt_nat_ip import LANRouter
 
 main = Blueprint("main", __name__)
 
@@ -16,7 +20,21 @@ def add_router():
         name = request.form.get("name")
         mgmt_ip = request.form.get("mgmt_ip")
         site = request.form.get("site")
-        api.add_router(name=name, mgmt_ip=mgmt_ip, site=site)
+
+        if LANRouter("192.168.72.0/24").is_ip_in_subnet(mgmt_ip):
+            api.add_router(name=name, mgmt_ip=mgmt_ip, site=site)
+        else:
+            mgmt_lan_ip = LANRouter("192.168.72.0/24").assign_unused_lan_ip()
+            api.push_config(
+                router_name="R_INTERNET",
+                template_name="add_router.j2",
+                template_vars={
+                    "mgmt_ip": mgmt_ip,
+                    "mgmt_lan_ip": mgmt_lan_ip
+                }
+            )
+            api.add_router(name=name, mgmt_ip=mgmt_lan_ip, site=site)
+
         flash("Router added successfully!")
         return redirect(url_for("main.list_routers"))
     return render_template("add_router.html")
@@ -56,9 +74,24 @@ def run_command(router_name):
             flash(f"Error: {str(e)}")
     return render_template("run_command.html", router_name=router_name, output=output)
 
-@main.route("/push", methods=["POST"])
-def push_config():
-    router_name = request.form["router_name"]
-    config = request.form["config"]
-    result = api.push_config(router_name, config)
-    return render_template("push_result.html", router_name=router_name, result=result)
+@main.route("/push_config/<router_name>", methods=["GET", "POST"])
+def push_config(router_name, template_name=None, template_vars=None):
+    result = None
+    if request.method == "POST":
+        if template_name and template_vars:
+            result = api.push_config(router_name, template_name, template_vars)
+            return redirect(url_for("list_routers"))
+        template_name = request.form.get("template_name")
+        template_vars_raw = request.form.get("template_vars")
+
+        try:
+            # Convert JSON string from textarea to dict
+            template_vars = json.loads(template_vars_raw)
+
+            result = api.push_config(router_name, template_name, template_vars)
+            flash("Configuration pushed successfully.")
+        except json.JSONDecodeError:
+            flash("Invalid JSON format for template variables.")
+        except Exception as e:
+            flash(f"Error: {str(e)}")
+    return render_template("push_config.html", router_name=router_name, result=result)

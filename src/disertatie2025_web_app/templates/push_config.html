@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Push Config to {{ router_name }}</title>
+</head>
+<body>
+    <h1>Push Config to {{ router_name }}</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+        <label for="template_name">Template Name:</label><br>
+        <input type="text" id="template_name" name="template_name" required><br><br>
+
+        <label for="template_vars">Template Variables (JSON format):</label><br>
+        <textarea id="template_vars" name="template_vars" rows="10" cols="50" required>{}</textarea><br><br>
+
+        <input type="submit" value="Push Config">
+    </form>
+
+    {% if result %}
+        <h2>Result:</h2>
+        <pre>{{ result }}</pre>
+    {% endif %}
+
+    <a href="{{ url_for('main.list_routers') }}">Back to Routers List</a>
+</body>
+</html>
