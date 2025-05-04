@@ -1,3 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Router Inventory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f8fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f0f2f5;
+            font-weight: 500;
+            color: #555;
+        }
+
+        tr:hover {
+            background-color: #f9fafb;
+        }
+
+        a {
+            color: #2c7be5;
+            text-decoration: none;
+            margin-right: 10px;
+            font-size: 0.95em;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            background-color: #2c7be5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #1a68d1;
+        }
+
+        .add-router {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .add-router:hover {
+            background-color: #5a6268;
+        }
+
+        .centered {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Router Inventory</h1>
+
 <form method="POST" action="{{ url_for('main.delete_routers') }}">
     <table>
         <thead>
@@ -21,13 +121,12 @@
                 <td>
                     <a href="{{ url_for('main.update_router', name=router.name) }}">Edit</a>
                     <a href="{{ url_for('main.run_command', router_name=router['name']) }}">Run Command</a>
-                    <a href="{{ url_for('main.push_config', router_name=router['name']) }}">Push Config</a> |
-
+                    <a href="{{ url_for('main.provision_multicast', router_name=router['name']) }}">Provision Multicast</a>
                 </td>
             </tr>
             {% else %}
             <tr>
-                <td colspan="7" style="text-align:center;">No routers found.</td>
+                <td colspan="6" class="centered">No routers found.</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -35,6 +134,7 @@
     <button type="submit">Delete Selected</button>
 </form>
 
-<br>
-<a href="{{ url_for('main.add_router') }}">Add New Router</a>
+<a class="add-router" href="{{ url_for('main.add_router') }}">Add New Router</a>
 
+</body>
+</html>

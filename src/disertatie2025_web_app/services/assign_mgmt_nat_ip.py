@@ -52,6 +52,12 @@ class LANRouter:
                 return host_ip
         return None
 
+    @staticmethod
+    def release_used_lan_ip(ip):
+        if ip in LANRouter._used_ips:
+            LANRouter._used_ips.remove(ip)
+
+
 
 
 if __name__ == "__main__":
